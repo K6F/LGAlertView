@@ -42,12 +42,14 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-
+        
         [self clearBackgrounds];
-
+        
+        self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        
         self.separatorView = [UIView new];
         [self addSubview:self.separatorView];
-
+        
         self.enabled = YES;
     }
     return self;
@@ -55,46 +57,51 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-
+    
     CGFloat frameWidth = CGRectGetWidth(self.bounds);
     CGFloat frameHeight = CGRectGetHeight(self.bounds);
-
+    
     // -----
-
+    
     BOOL imageExists = (self.imageView.image != nil);
     CGSize imageSize = self.imageView.image.size;
-
+    
+    CGFloat widthImage = self.widthImage;
+    if (widthImage){
+        imageSize.width = widthImage;
+    }
+    
     CGFloat textLabelMaxWidth;
-
+    
     if (imageExists) {
         textLabelMaxWidth = frameWidth - (LGAlertViewPaddingWidth * 2.0) - imageSize.width - LGAlertViewButtonImageOffsetFromTitle;
     }
     else {
         textLabelMaxWidth = frameWidth - (LGAlertViewPaddingWidth * 2.0);
     }
-
+    
     CGRect textLabelFrame = CGRectMake(NSNotFound,
                                        LGAlertViewPaddingHeight,
                                        textLabelMaxWidth,
                                        frameHeight - (LGAlertViewPaddingHeight * 2.0));
-
+    
     if (self.textLabel.textAlignment == NSTextAlignmentLeft) {
         textLabelFrame.origin.x = LGAlertViewPaddingWidth;
-
+        
         if (imageExists && self.iconPosition == LGAlertViewButtonIconPositionLeft) {
             textLabelFrame.origin.x += imageSize.width + LGAlertViewButtonImageOffsetFromTitle;
         }
     }
     else if (self.textLabel.textAlignment == NSTextAlignmentRight) {
         textLabelFrame.origin.x = frameWidth - textLabelMaxWidth - LGAlertViewPaddingWidth;
-
+        
         if (imageExists && self.iconPosition == LGAlertViewButtonIconPositionRight) {
             textLabelFrame.origin.x -= imageSize.width + LGAlertViewButtonImageOffsetFromTitle;
         }
     }
     else {
         textLabelFrame.origin.x = (frameWidth / 2.0) - (textLabelMaxWidth / 2.0);
-
+        
         if (imageExists) {
             if (self.iconPosition == LGAlertViewButtonIconPositionLeft) {
                 textLabelFrame.origin.x += (imageSize.width / 2.0) + (LGAlertViewButtonImageOffsetFromTitle / 2.0);
@@ -104,27 +111,32 @@
             }
         }
     }
-
+    
     if (LGAlertViewHelper.isNotRetina) {
         textLabelFrame = CGRectIntegral(textLabelFrame);
     }
-
+    
     self.textLabel.frame = textLabelFrame;
-
+    
     // -----
-
+    
     if (self.imageView.image) {
         CGSize imageSize = self.imageView.image.size;
-
+        
+        CGFloat widthImage = self.widthImage;
+        if (widthImage){
+            imageSize.width = widthImage;
+        }
+        
         CGRect imageViewFrame = CGRectMake(NSNotFound,
                                            (frameHeight / 2.0) - (imageSize.height / 2.0),
                                            imageSize.width,
                                            imageSize.height);
-
+        
         if (self.textLabel.textAlignment == NSTextAlignmentCenter) {
             CGSize textLabelSize = [self.textLabel sizeThatFits:CGSizeMake(textLabelMaxWidth, CGFLOAT_MAX)];
             CGFloat imageAndTextWidth = imageSize.width + textLabelSize.width + LGAlertViewButtonImageOffsetFromTitle;
-
+            
             if (self.iconPosition == LGAlertViewButtonIconPositionLeft) {
                 imageViewFrame.origin.x = (frameWidth / 2.0) - (imageAndTextWidth / 2.0);
             }
@@ -140,16 +152,16 @@
                 imageViewFrame.origin.x = frameWidth - imageSize.width - LGAlertViewPaddingWidth;
             }
         }
-
+        
         if (LGAlertViewHelper.isNotRetina) {
             imageViewFrame = CGRectIntegral(imageViewFrame);
         }
-
+        
         self.imageView.frame = imageViewFrame;
     }
-
+    
     // -----
-
+    
     if (!self.separatorView.hidden) {
         self.separatorView.frame = CGRectMake(0.0,
                                               CGRectGetHeight(self.bounds) - LGAlertViewHelper.separatorHeight,
@@ -160,7 +172,7 @@
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated {
     [super setHighlighted:highlighted animated:animated];
-
+    
     if (highlighted) {
         self.textLabel.textColor = self.titleColorHighlighted;
         self.imageView.image = self.imageHighlighted;
@@ -169,13 +181,13 @@
     else {
         [self setEnabled:self.enabled];
     }
-
+    
     [self clearBackgrounds];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     if (selected) {
         self.textLabel.textColor = self.titleColorHighlighted;
         self.imageView.image = self.imageHighlighted;
@@ -184,15 +196,15 @@
     else {
         [self setEnabled:self.enabled];
     }
-
+    
     [self clearBackgrounds];
 }
 
 - (void)setEnabled:(BOOL)enabled {
     _enabled = enabled;
-
+    
     self.userInteractionEnabled = enabled;
-
+    
     if (enabled) {
         self.textLabel.textColor = self.titleColor;
         self.imageView.image = self.image;
@@ -208,31 +220,31 @@
 - (CGSize)sizeThatFits:(CGSize)size {
     CGSize sizeForTextLabel = size;
     sizeForTextLabel.width -= LGAlertViewPaddingWidth * 2.0;
-
+    
     if (self.imageView.image) {
         sizeForTextLabel.width -= self.imageView.image.size.width + LGAlertViewButtonImageOffsetFromTitle;
     }
-
+    
     CGSize labelSize = [self.textLabel sizeThatFits:size];
-
+    
     CGSize resultSize;
-
+    
     if (self.imageView.image) {
         CGSize imageSize = self.imageView.image.size;
-
+        
         CGFloat width = MAX(labelSize.width, imageSize.width);
         width = MIN(width, size.width);
-
+        
         CGFloat height = MAX(labelSize.height, imageSize.height);
-
+        
         resultSize = CGSizeMake(width, height);
     }
     else {
         resultSize = labelSize;
     }
-
+    
     resultSize.height += LGAlertViewPaddingHeight * 2.0;
-
+    
     return resultSize;
 }
 
@@ -242,3 +254,4 @@
 }
 
 @end
+

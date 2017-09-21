@@ -46,8 +46,11 @@
 @property (strong, nonatomic, nullable) UIImage *imageHighlighted;
 @property (strong, nonatomic, nullable) UIImage *imageDisabled;
 
+@property (nonatomic) CGFloat widthImage;
+
 @property (assign, nonatomic) LGAlertViewButtonIconPosition iconPosition;
 
 @property (assign, nonatomic) BOOL enabled;
 
 @end
+
