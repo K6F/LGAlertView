@@ -2927,8 +2927,16 @@ LGAlertViewType;
 }
 
 - (void)layoutValidateWithSize:(CGSize)size {
+    CGSize viewSize = size;
     if (CGSizeEqualToSize(size, CGSizeZero)) {
         size = self.viewController.view.bounds.size;
+        viewSize = size;
+        if (@available(iOS 11.0, *)) {
+            UIWindow *mainWindow = [[[UIApplication sharedApplication] delegate] window];
+            if (mainWindow.safeAreaInsets.top > 0.0) {
+                size = CGSizeMake(size.width, size.height - 34.0);
+            }
+        }
     }
     
     // -----
@@ -2937,8 +2945,8 @@ LGAlertViewType;
     
     // -----
     
-    self.view.frame = CGRectMake(0.0, 0.0, size.width, size.height);
-    self.backgroundView.frame = CGRectMake(0.0, 0.0, size.width, size.height);
+    self.view.frame = CGRectMake(0.0, 0.0, viewSize.width, viewSize.height);
+    self.backgroundView.frame = CGRectMake(0.0, 0.0, viewSize.width, viewSize.height);
     
     // -----
     
