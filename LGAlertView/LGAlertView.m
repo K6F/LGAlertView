@@ -36,6 +36,7 @@
 #import "LGAlertViewHelper.h"
 #import "LGAlertViewWindowsObserver.h"
 #import "LGAlertViewShadowView.h"
+#import "LGAlertViewAutoSizingTableView.h"
 
 #pragma mark - Constants
 
@@ -2873,8 +2874,7 @@ LGAlertViewType;
                 }
                 
                 self.buttonTitles = buttonTitles;
-                
-                self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+                self.tableView = [[LGAlertViewAutoSizingTableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
                 self.tableView.clipsToBounds = NO;
                 self.tableView.backgroundColor = UIColor.clearColor;
                 self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -2885,7 +2885,7 @@ LGAlertViewType;
                 self.tableView.frame = CGRectMake(0.0, 0.0, width, CGFLOAT_MAX);
                 self.tableView.estimatedRowHeight = 0;
                 [self.tableView reloadData];
-                
+                [self.tableView layoutIfNeeded];
                 if (!offsetY) {
                     offsetY = -self.innerMarginHeight;
                 }
