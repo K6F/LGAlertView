@@ -2882,6 +2882,7 @@ LGAlertViewType;
                 self.tableView.delegate = self;
                 self.tableView.scrollEnabled = NO;
                 [self.tableView registerClass:[LGAlertViewCell class] forCellReuseIdentifier:@"cell"];
+                self.tableView.estimatedRowHeight = self.buttonsHeight;
                 self.tableView.frame = CGRectMake(0.0, 0.0, width, CGFLOAT_MAX);
                 self.tableView.estimatedRowHeight = 0;
                 [self.tableView reloadData];
