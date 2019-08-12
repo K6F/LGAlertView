@@ -59,7 +59,7 @@
     @try {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             __weak typeof(self) weakSelf = self;
-            [UIView animateWithDuration:coordinator.transitionDuration animations:^{
+            [UIView animateWithDuration:0.5 animations:^{
                 if (weakSelf) {
                     if ([weakSelf respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
                         [weakSelf setNeedsStatusBarAppearanceUpdate];
