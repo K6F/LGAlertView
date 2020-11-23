@@ -48,7 +48,7 @@
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
         
         self.separatorView = [UIView new];
-        [self addSubview:self.separatorView];
+        [self.contentView addSubview:self.separatorView];
         
         self.enabled = YES;
     }
