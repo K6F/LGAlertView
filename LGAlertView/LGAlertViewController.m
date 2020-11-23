@@ -57,25 +57,26 @@
     }
     
     @try {
+        // make sure there is a correct duration
+        NSTimeInterval duration;
+        if (coordinator) {
+            duration = coordinator.transitionDuration;
+        }else if (self.transitionCoordinator) {
+            duration = self.transitionCoordinator.transitionDuration;
+        }else {
+            duration = 0.5;
+        }
+        
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             __weak typeof(self) weakSelf = self;
-            // make sure there is a correct duration
-            NSTimeInterval duration;
-            if (coordinator) {
-                duration = coordinator.transitionDuration;
-            }else if (self.transitionCoordinator) {
-                duration = self.transitionCoordinator.transitionDuration;
-            }else {
-                duration = 0.5;
-            }
-            
             [UIView animateWithDuration:duration animations:^{
-                if (weakSelf) {
-                    if ([weakSelf respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
-                        [weakSelf setNeedsStatusBarAppearanceUpdate];
+                __strong typeof(self) strongSelf = weakSelf;
+                if (strongSelf) {
+                    if ([strongSelf respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
+                        [strongSelf setNeedsStatusBarAppearanceUpdate];
                     }
-                    if (weakSelf.alertView) {
-                        [weakSelf.alertView layoutValidateWithSize:size];
+                    if (strongSelf.alertView) {
+                        [strongSelf.alertView layoutValidateWithSize:size];
                     }
                 }
             }];
