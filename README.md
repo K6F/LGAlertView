@@ -1,5 +1,9 @@
 # LGAlertView
 
+
+FORK : 暂时修复原项目的一个Bug，[https://github.com/Friend-LGA/LGAlertView/issues/62](https://github.com/Friend-LGA/LGAlertView/issues/62)，作为网络库引入项目中。
+
+
 Customizable implementation of UIAlertViewController, UIAlertView and UIActionSheet. All in one.
 You can customize every detail. Make AlertView of your dream! :)
 
